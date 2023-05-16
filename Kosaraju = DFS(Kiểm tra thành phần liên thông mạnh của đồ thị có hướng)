@@ -1,0 +1,133 @@
+#include<iostream>
+#include<set>
+#include<map>
+#include<unordered_map>
+#include<unordered_set>
+#include<array>
+#include<string>
+#include<fstream>
+#include<sstream>
+#include<cstring>
+#include<algorithm>
+#include<climits>
+#include<cmath>
+#include<numeric>
+#include<vector>
+#include<stack>
+#include<cstddef>
+#include<utility>
+#include<queue>
+#include<deque>
+#include<iomanip>
+#include<random>
+#include<cstdbool>
+using namespace std;
+
+#define ll long long
+#define ull unsigned long long
+#define l long
+#define fl float
+#define fi first
+#define se second
+#define pb push_back
+#define PB pop_back()
+#define pf push_front
+#define PF pop_front()
+#define era erase
+#define ins insert
+#define xd cout<<endl;
+#define FOR(i,r,n) for(int i=r ; i<n; ++i)
+#define FORn(i,r,n) for(int i=r ; i<=n; ++i)
+#define FORen(i,r,n) for(int i=n-1; i>=r; --i)
+
+inline ll gcd(ll a, ll b) { if (b == 0) return a; else return gcd(b, a % b); }
+inline ll lcm(ll a, ll b) { return b / gcd(a, b) * a; }
+inline ll max(ll a, ll b) { ll max; return max = a > b ? a : b; }
+inline ll min(ll a, ll b) { ll min; return min = a < b ? a : b; }
+
+const ll mod = 1000000007;
+const ll inf = 1000002804;
+const int dx1[8] = { -1,-1,-1,0,0,1,1,1 };
+const int dy1[8] = { -1,0,1,-1,1,-1,0,1 };
+const int dx2[4] = { -1,0,1,0 };
+const int dy2[4] = { 0,-1,0,1 };
+
+//vector<pair<int, int>> edge;
+vector<int> v[1001], tv[1001];
+vector<int> topo;
+char a[1001][1001];
+bool visited[1001];
+int V, E, U;
+int degree[1001];
+stack<int> st;
+
+//Bước 1: goij dfs vào v ban đầu và lưu thứ tự vào stack
+//Bước 2: xây dựng đồ thị lật ngược của đồ thị ban đầu
+//Bước 3: pop các đỉnh trong stack ở B1 và gọi DFS để liệt kê các thành phần lkm
+//liên thông mạnh: strong connected component: SCC
+
+void dfs1(int i) {
+	visited[i] = true;
+	for (int x : v[i]) {
+		if (!visited[x]) {
+			dfs1(x);
+		}
+	}
+	st.push(i);
+}
+
+void dfs2(int i) {
+	visited[i] = true;
+	cout << i << " ";
+	for (int x : tv[i]) {
+		if (!visited[x]) {	
+			dfs2(x);
+		}
+	}
+}
+
+void kosaraju() {
+	memset(visited, false, sizeof(visited));
+	FORn(i, 1, V) {
+		if (!visited[i]) {
+			dfs1(i);
+		}
+	}
+	memset(visited, false, sizeof(visited));
+	int cnt = 0;
+	while (!st.empty()) {
+		int top = st.top();
+		st.pop();
+		if (!visited[top]) {
+			dfs2(top);
+			++cnt;
+			cout << endl;
+		}
+	}
+	if (cnt == 1) cout << "YES";
+	else cout << "NO";
+}
+
+void solve() {
+	cin >> V >> E;
+	FORn(i, 1, E) {
+		int x, y;
+		cin >> x >> y;
+		v[x].pb(y);
+		tv[y].pb(x);
+	}
+	kosaraju();
+
+}
+
+int main() {
+	int tc; cin >> tc;
+	while (tc--) {
+		solve();
+		FORn(i, 1, V) {
+			v[i].clear();
+			tv[i].clear();
+		}
+		xd
+	}
+}
