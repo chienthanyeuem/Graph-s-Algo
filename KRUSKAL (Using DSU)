@@ -1,0 +1,139 @@
+#include<iostream>
+#include<set>
+#include<map>
+#include<unordered_map>
+#include<unordered_set>
+#include<array>
+#include<string>
+#include<fstream>
+#include<sstream>
+#include<cstring>
+#include<algorithm>
+#include<climits>
+#include<cmath>
+#include<numeric>
+#include<vector>
+#include<stack>
+#include<cstddef>
+#include<utility>
+#include<queue>
+#include<deque>
+#include<iomanip>
+#include<random>
+#include<cstdbool>
+using namespace std;
+
+#define str string
+#define ll long long
+#define ull unsigned long long
+#define l long
+#define fl float
+#define fi first
+#define se second
+#define pb push_back
+#define PB pop_back()
+#define pf push_front
+#define PF pop_front()
+#define era erase
+#define ins insert
+#define FOR(i,r,n) for(int i=r ; i<n; ++i)
+#define FORn(i,r,n) for(int i=r ; i<=n; ++i)
+#define FORen(i,r,n) for(int i=n-1; i>=r; --i)
+
+inline ll gcd(ll a, ll b) { if (b == 0) return a; else return gcd(b, a % b); }
+inline ll lcm(ll a, ll b) { return b / gcd(a, b) * a; }
+inline ll max(ll a, ll b) { ll max; return max = a > b ? a : b; }
+inline ll min(ll a, ll b) { ll min; return min = a < b ? a : b; }
+
+const ll mod = 1000000007;
+const ll inf = 1000002804;
+const int dx1[8] = { -1,-1,-1,0,0,1,1,1 };
+const int dy1[8] = { -1,0,1,-1,1,-1,0,1 };
+const int dx2[4] = { -1,0,1,0 };
+const int dy2[4] = { 0,-1,0,1 };
+const int maxn = 1001;
+
+bool visited[maxn];
+vector<int> vec[maxn];
+int V, E;
+int a[maxn][maxn];
+int parent[maxn], sz[maxn];
+
+struct edge {
+	int u, v;
+	int w;
+	edge(int& a, int& b, int& c) {
+		u = a; v = b; w = c;
+	}
+};
+
+vector<edge> canh;
+
+void make_set() {
+	FORn(i, 1, V) {
+		parent[i] = i;
+		sz[i] = 1;
+	}
+}
+
+int find(int n) {
+	if (n == parent[n]) return n;
+	else return parent[n] = find(parent[n]);
+}
+
+bool Union(int a, int b) {
+	a = find(a);
+	b = find(b);
+	if (a == b)return false;//khong the gop vao voi nhau
+	if (sz[a] < sz[b]) swap(a, b);
+	parent[b] = a;
+	sz[a] += sz[b];
+	return true;
+}
+
+bool cmp(edge a, edge b) {
+	return a.w < b.w;
+}
+
+void kruskal() {
+	//tao cay khung cuc tieu rong
+	vector<edge> mst;
+	int d = 0;
+	//sort canh theo chieu dai tangg dan
+	sort(canh.begin(), canh.end(), cmp);
+	//lap de chen cac nut thoa man vao cay khung
+	FOR(i, 0, E) {
+		if (mst.size() == V - 1) break;
+		edge e = canh[i];
+		if (Union(e.u, e.v)) {
+			mst.pb(e);
+			d += e.w;
+		}
+	}
+	for (edge x : mst) {
+		cout << x.u << " " << x.v << " " << x.w << endl;
+	}
+	cout << d;
+}
+
+void solve() {
+	cin >> V >> E;
+	FOR(i, 0, E) {
+		int x, y, w; cin >> x >> y >> w;
+		edge e = edge(x, y, w);
+		canh.pb(e);
+	}
+	make_set();
+	kruskal();
+	canh.clear();
+}
+
+int main() {
+	int tc; cin >> tc;
+	//cin.ignore();
+	while (tc--) {
+		solve();
+		cout << endl;
+	}
+}
+
