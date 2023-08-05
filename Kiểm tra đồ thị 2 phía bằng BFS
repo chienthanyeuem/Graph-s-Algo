@@ -95,8 +95,12 @@ int main() {
 	}
 	bool check = true;
 	FOR(i, 1, V + 1) {
-		if (!is_Bipartite(i)) check = false;
-		break;
+		if(color[i] == -1){
+			if(!is_Bipartite(i){
+				check = false;
+				break;
+			}
+		}
 	}
 	if (check == true) cout << "Graph is Bipartite";
 	else cout << "Graph is not Bipartite";
