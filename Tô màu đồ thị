@@ -1,0 +1,76 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+#include<cmath>
+#include<map>
+#include<climits>
+#include<cstring>
+
+using namespace std;
+#define FOR(i,r,n) for(int i = r; i <= n; ++i)
+#define run() int t; cin >>t; while(t--)
+#define ll long long
+#define pb push_back
+const ll mod = 1000000007;
+
+int V, E, k;
+vector<int> v1[101];
+int color[101];
+
+bool check(int u,  int c) {
+	for (int v : v1[u]) {
+		if (color[v] == c) return false;
+	}
+	return true;
+}
+
+int ok(int c) {
+	int ans = 0;
+	FOR(i, 1, V) {
+		if (!color[i] && check(i, c)) {
+			color[i] = c;
+			++ans;
+		}
+	}
+	return ans;
+}
+
+void solve() {
+	cin >> V >> E >> k;
+	memset(color, 0, sizeof(color));
+	FOR(i, 1, V) {
+		v1[i].clear();
+	}
+	FOR(i, 0, E - 1) {
+		int x, y;
+		cin >> x >> y;
+		v1[x].pb(y);
+		v1[y].pb(x);
+	}
+	int res = 0, mau = 1;
+	while (res < V) {
+		res += ok(mau++);
+	}
+	FOR(i, 1, V) {
+		/*if (color[i] > k) {
+			cout << "NO";
+			return;
+		}*/
+		cout << i << ": " << color[i] << endl;
+	}
+	//cout << "YES";
+}
+
+int main() {
+	run() {
+		solve();
+		cout << endl;
+	}
+}
+
+
+
+
+
+
