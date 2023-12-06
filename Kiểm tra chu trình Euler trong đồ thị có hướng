@@ -1,0 +1,93 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+#include<cmath>
+#include<map>
+#include<climits>
+#include<cstring>
+#include<set>
+#include<stack>
+
+using namespace std;
+#define FOR(i,r,n) for(int i = r; i <= n; ++i)
+#define run() int t; cin >>t; while(t--)
+#define ll long long
+#define pb push_back
+const ll mod = 1000000007;
+
+int V, E;
+set<int> adj[1001];
+bool used[1001];
+vector<int> EC;
+int degree_ra[1001], degree_vao[1001];
+
+void euler(int u) {
+	stack<int> st;
+	st.push(u);
+	while (!st.empty()) {
+		int top = st.top();
+		if (adj[top].size() != 0) {
+			int y = *adj[top].begin();
+			st.push(y);
+			adj[top].erase(y);
+		}
+		else {
+			st.pop();
+			EC.pb(top);
+		}
+	}
+}
+
+void dfs(int u) {
+	used[u] = true;
+	for (int x : adj[u]) {
+		if (!used[x]) dfs(x);
+	}
+}
+
+void solve() {
+	cin >> V >> E;
+	memset(used, false, sizeof(used));
+	memset(degree_ra, 0, sizeof(degree_ra));
+	memset(degree_vao, 0, sizeof(degree_vao));
+	FOR(i, 1, V) adj[i].clear();
+	EC.clear();
+	FOR(i, 1, E) {
+		int x, y;
+		cin >> x >> y;
+		adj[x].insert(y);
+		degree_ra[x]++;
+		degree_vao[y]++;
+	}
+	dfs(1);
+	FOR(i, 1, V) {
+		if (!used[i]) {
+			cout << 0;
+			return;
+		}
+	}
+	FOR(i, 1, V) {
+		if (degree_vao[i] != degree_ra[i]) {
+			cout << 0;
+			return;
+		}
+	}
+	euler(1);
+	//for (int x : EC) cout << x << " ";
+	if (*EC.rbegin() == 1 and *EC.begin() == 1) cout << 1;
+	else cout << 0;
+}
+
+int main() {
+	run() {
+		solve();
+		cout << endl;
+	}
+}
+
+
+
+
+
+
