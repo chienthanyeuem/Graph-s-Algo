@@ -1,0 +1,56 @@
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+#include<cmath>
+#include<map>
+#include<climits>
+#include<cstring>
+#include<set>
+#include<stack>
+#include<queue>
+
+using namespace std;
+#define FOR(i,r,n) for(int i = r; i <= n; ++i)
+#define run() int t; cin >>t; while(t--)
+#define ll long long
+#define pb push_back
+const ll mod = 1000000007;
+const ll INF = 1000002804;
+
+int a[101][101], n, V, E;
+
+void solve() {
+	cin >> V >> E;
+	FOR(i, 1, V)
+		FOR(j, 1, V)
+			a[i][j] = 100000000;
+	FOR(i, 1, V) a[i][i] = 0;
+	FOR(i, 1, E) {
+		int x, y, w;
+		cin >> x >> y >> w;
+		a[x][y] = w;
+		a[y][x] = w;
+	}
+	FOR(k, 1, V) {
+		FOR(i, 1, V) {
+			FOR(j, 1, V) {
+				a[i][j] = min(a[i][j], a[i][k] + a[k][j]);
+			}
+		}
+	}
+	cin >> n;
+	while (n--) {
+		int s, t; cin >> s >> t;
+		cout << a[s][t] << endl;
+	}
+}
+
+int main() {
+	//run() {
+		solve();
+		//cout << endl;
+	//}
+}
+
+
